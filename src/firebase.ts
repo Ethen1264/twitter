@@ -1,10 +1,14 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from 'firebase/auth';
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBAMK1xpJNBRaUv282gYf9T-TvLgFqRBcc",
-  authDomain: "nwitter-reloaded-914a9.firebaseapp.com",
-  projectId: "nwitter-reloaded-914a9",
-  storageBucket: "nwitter-reloaded-914a9.appspot.com",
-  messagingSenderId: "206489839192",
-  appId: "1:206489839192:web:4eadd5c8071f741a5f0c2d"
+  apiKey: "AIzaSyCZj1g6P8fQqIrzCM7fJbXf1vHglDfk1js",
+  authDomain: "twitter-a5fbe.firebaseapp.com",
+  projectId: "twitter-a5fbe",
+  storageBucket: "twitter-a5fbe.appspot.com",
+  messagingSenderId: "795719215478",
+  appId: "1:795719215478:web:5c6c8b40ad8a70e93e3257"
 };
 const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app)
