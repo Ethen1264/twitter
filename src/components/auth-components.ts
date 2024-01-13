@@ -44,3 +44,11 @@ export const Switcher = styled.span`
     color: #1d9bf0;
   }
 `
+
+export const Switcher2 = styled.span`
+  margin-top: 20px;
+  margin-bottom: 50px;
+  a{
+    color: #1d9bf0;
+  }
+`

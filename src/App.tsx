@@ -4,6 +4,7 @@ import Home from './routes/home';
 import Profile from './routes/profile';
 import Login from './routes/login';
 import CreateAccount from './routes/create-account';
+import ForgotPassword from './routes/fotgot-password';
 import styled, { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import { useEffect, useState } from 'react';
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   { path: '/create-account', element: <CreateAccount /> },
+  { path: '/forgot-password', element: <ForgotPassword /> },
 ]);
 
 const GlobalStyles = createGlobalStyle`
@@ -58,7 +60,7 @@ const Wrapper = styled.div`
 function App() {
   const [isLoading, setLoading] = useState(true);
   const init = async () => {
-    await auth.authStateReady();
+    await auth.authStateReady();      // 사용자가 로그인 되었는지 확인하여 대기함
     setLoading(false);
   };
   useEffect(() => {

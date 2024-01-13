@@ -2,7 +2,7 @@ import { auth } from '../firebase';
 
 export default function Home() {
   const logOut = () => {
-    auth.signOut()
+    auth.signOut()      // 로그아웃 함수
   }
   return (
     <h1>
