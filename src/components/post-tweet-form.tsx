@@ -1,7 +1,8 @@
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { auth, db } from '../firebase';
+import { auth, db, storage } from '../firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const Form = styled.form`
   display: flex;
@@ -77,12 +78,22 @@ export default function PostTweetForm() {
     if(!user || isLoading || tweet === "" || tweet.length > 180) return;
     try{
       setLoading(true)
-      await addDoc(collection(db, "tweets"), {                            // 사용자가 작성한 글이 db로 post되는 코드
+      const doc = await addDoc(collection(db, "tweets"), {              // db의 tweets라는 문서를 추가함                      // 사용자가 작성한 글이 db로 post되는 코드
         tweet,
         createAt: Date.now(),
-        username: user.displayName || "Anonymous",
+        username: user.displayName || "Anonymous",      // 글의 내용, 시간, id, 유저의 name을 저장함
         userId: user.uid,
       })
+      if(file){
+        const locationRef = ref(storage, `tweets/${user.uid}-${user.displayName}/${doc.id}`)      // localstorage에 사용자의 id와 이름으로 되어있는 폴더를 만들고 그 안에 doc id로 되어있는 파일을 만들어 img를 저장
+        const result = await uploadBytes(locationRef, file)   // 파일을 업로드함
+        const url = getDownloadURL(result.ref)    // 업로드한 이미지의 url을 받아옴
+        await updateDoc(doc, {    // 문서의 이미지 url을 저장
+          photo: url,           
+        })
+      }
+      setTweet("")
+      setFile(null)
     } catch(e) {
       console.log(e)
     } finally {
@@ -93,7 +104,7 @@ export default function PostTweetForm() {
 
   return (
     <Form onSubmit={onSubmit}>
-      <TextArea rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening?!" />
+      <TextArea required rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening?!" />
       <AttachFileButton htmlFor="file">{file ? "Photo added" : "Add Photo"}</AttachFileButton>
       <AttachFileInput onChange={onFileChange} type="file" id="file" accept="image/*" />
       <SubmitBtn type="submit" value={isLoading ? "Posting..." : "Post Tweet"} />
