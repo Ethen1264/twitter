@@ -87,9 +87,9 @@ export default function PostTweetForm() {
       if(file){
         const locationRef = ref(storage, `tweets/${user.uid}-${user.displayName}/${doc.id}`)      // localstorage에 사용자의 id와 이름으로 되어있는 폴더를 만들고 그 안에 doc id로 되어있는 파일을 만들어 img를 저장
         const result = await uploadBytes(locationRef, file)   // 파일을 업로드함
-        const url = getDownloadURL(result.ref)    // 업로드한 이미지의 url을 받아옴
+        const url = await getDownloadURL(result.ref)    // 업로드한 이미지의 url을 받아옴
         await updateDoc(doc, {    // 문서의 이미지 url을 저장
-          photo: url,           
+          photo: url,
         })
       }
       setTweet("")
@@ -105,7 +105,7 @@ export default function PostTweetForm() {
   return (
     <Form onSubmit={onSubmit}>
       <TextArea required rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening?!" />
-      <AttachFileButton htmlFor="file">{file ? "Photo added" : "Add Photo"}</AttachFileButton>
+      <AttachFileButton htmlFor="file">{file ? "Photo added✅" : "Add Photo"}</AttachFileButton>
       <AttachFileInput onChange={onFileChange} type="file" id="file" accept="image/*" />
       <SubmitBtn type="submit" value={isLoading ? "Posting..." : "Post Tweet"} />
     </Form>
